@@ -1,9 +1,18 @@
 import Image from "next/image";
 import { Button } from "../_components/ui/button";
 import { LogInIcon } from "lucide-react";
+import { SignInButton } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 
-export default function Login() {
+
+export default async function Login() {
+    const {userId} = await auth()
+    if (userId) {
+        redirect("/")
+    } 
+
     return (
         <div className=" ">
             {/* ESQUERDA */}
@@ -22,10 +31,12 @@ export default function Login() {
                     facilitando o controle do seu orçamento.
                 </p>
 
-                <Button variant="outline">
-                    <LogInIcon className="mr-2" />
-                    Fazer login ou criar conta
-                </Button>
+                <SignInButton>
+                    <Button variant="outline">
+                        <LogInIcon className="mr-2" />
+                        Fazer login ou criar conta
+                    </Button>
+                </SignInButton>
 
             </div>
             {/* DIREITA */}
