@@ -11,8 +11,8 @@ export default async function Home() {
     redirect("/login")
   }
   return (
-    <div className="flex h-full items-center justify-center">
-      <UserButton showName />
+    <div className="flex h-full items-center justify-center mt-10 ">
+      <UserButton  showName  appearance={{variables:{colorText:'white',fontSize:"24px"},elements:{userButtonAvatarBox:"34"}}} />
     </div>
   );
 }
