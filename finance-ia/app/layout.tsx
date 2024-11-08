@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import {Mulish} from "next/font/google";
 import "./globals.css";
 
 import {
@@ -10,16 +10,10 @@ import {
   UserButton
 } from '@clerk/nextjs'
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+const mulish = Mulish({
+  subsets: ['latin-ext'],
+  variable: '--font-mulish'
+})
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -35,7 +29,7 @@ export default function RootLayout({
     <ClerkProvider>
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
+        className={` ${mulish.variable} antialiased dark`}
       >
         
         {children}
