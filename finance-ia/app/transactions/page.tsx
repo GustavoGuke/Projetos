@@ -3,6 +3,7 @@ import { Button } from "../_components/ui/button";
 import { db } from "../_lib/prisma";
 import { DataTable } from "../_components/ui/data.table";
 import { transactionsColumns } from "./_columns";
+import { TransactionButtonAdd } from "../_components/TransactionButtonAdd";
 
 export default async function Transactions() {
     const transactions = await db.transaction.findMany({})
@@ -12,10 +13,7 @@ export default async function Transactions() {
 
             <div className="flex w-full justify-between items-center">
                 <h1 className="text-2xl font-bold">Transações</h1>
-                <Button className="rounded-full">
-                    Adicionar Transação
-                    <ArrowDownUpIcon className="ml-2"/>
-                </Button>
+                <TransactionButtonAdd />
             </div>
 
             <DataTable columns={transactionsColumns} data={transactions}/>
