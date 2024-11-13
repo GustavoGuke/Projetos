@@ -3,7 +3,7 @@
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { ArrowDownUpIcon } from "lucide-react";
+import { ArrowDownUpIcon, CalendarIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import {
     Dialog,
@@ -14,10 +14,22 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "./ui/dialog"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "./ui/select"
 import { TransactionCategory, TransactionPaymentMethod, TransactionType } from "@prisma/client";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
 import { MoneyInput } from "./InputMoney";
+import { TRANSACTION_CATEGORY_OPTIONS, TRANSACTION_PAYMENT_METHOD_OPTIONS, TRANSACTION_TYPE_OPTIONS } from "../_constants/transactionsTypeOptions";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Calendar } from "./ui/calendar";
+import { DatePickerDemo } from "./ui/date-picker";
+
 
 const formSchema = z.object({
     name: z.string().trim().min(1, { message: "Nome é obrigatório" }),
@@ -48,7 +60,7 @@ export function TransactionButtonAdd() {
     function onSubmit(values: z.infer<typeof formSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        
+
     }
 
 
@@ -77,9 +89,9 @@ export function TransactionButtonAdd() {
                                 <FormItem>
                                     <FormLabel>Nome</FormLabel>
                                     <FormControl>
-                                        <Input  placeholder="Nome da transção" {...field} />
+                                        <Input placeholder="Nome da transção" {...field} />
                                     </FormControl>
-                                    
+
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -98,13 +110,110 @@ export function TransactionButtonAdd() {
                                 </FormItem>
                             )}
                         />
-                        
+                        <FormField
+                            control={form.control}
+                            name="type"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Tipo</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select a verified email to display" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {
+                                                TRANSACTION_TYPE_OPTIONS.map((transaction) => {
+                                                    return (
+                                                        <SelectItem key={transaction.value} value={transaction.value}>{transaction.label}</SelectItem>
+                                                    )
+                                                })
+                                            }
+                                        </SelectContent>
+                                    </Select>
+
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="paymentMethod"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Forma de pagamento</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select a verified email to display" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {
+                                                TRANSACTION_PAYMENT_METHOD_OPTIONS.map((option) => {
+                                                    return (
+                                                        <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                                                    )
+                                                })
+                                            }
+                                        </SelectContent>
+                                    </Select>
+
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="category"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Categotia</FormLabel>
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Select a verified email to display" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {
+                                                TRANSACTION_CATEGORY_OPTIONS.map((option) => {
+                                                    return (
+                                                        <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+                                                    )
+                                                })
+                                            }
+                                        </SelectContent>
+                                    </Select>
+
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="date"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Data</FormLabel>
+                                   <DatePickerDemo  value={field.value} onchange={field.onChange}/>
+
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
 
                         <DialogFooter>
                             <Button >Adicionar</Button>
                             <Button variant="outline">Cancelar</Button>
                         </DialogFooter>
+
                     </form>
+
                 </Form>
             </DialogContent>
 

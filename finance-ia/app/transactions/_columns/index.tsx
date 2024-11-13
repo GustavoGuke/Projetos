@@ -6,38 +6,12 @@ import { ColumnDef } from "@tanstack/react-table"
 import { CircleIcon, PencilIcon, TrashIcon } from "lucide-react"
 import TransactionTypeBadge from "../_components/type-badge"
 import { Button } from "@/app/_components/ui/button"
+import { TRANSACTION_CATEGORY_LABELS, TRANSACTION_PAYMENT_METHOD_LABELS } from "@/app/_constants/transactionsTypeOptions"
 
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-const TRANSACTION_CATEGORY_LABELS = {
-    FOOD: "Alimentação",
-    ENTERTAINMENT: "Entretenimento",
-    HEALTH: 'Saude',
-    OTHER: 'Outro',
-    TRANSPORTATION: "Transporte",
-    TRAVEL: 'Viagem',
-    UTILITIES: 'Utilidades',
-    WORK: 'Trabalho',
-    EDUCATION: 'Educação',
-    HOUSE: 'Casa',
-    SALARY: 'Salario',
-    FAMILY: 'Familia',
-    HOBBY: 'Hobby',
-    INSURANCE: 'Seguro',
-    CAR: 'Carro',
-}
 
-
-const TRANSACTION_PAYMENT_METHOD_LABELS = {
-    BANK_TRANSFER: "Transferência Bancária",
-    BANK_SLIP: "Boleto Bancário",
-    CASH: "Dinheiro",
-    CREDIT_CARD: "Cartão de Crédito",
-    DEBIT_CARD: "Cartão de Débito",
-    OTHER: "Outros",
-    PIX: "Pix",
-};
 
 export const transactionsColumns: ColumnDef<Transaction>[] = [
     {
