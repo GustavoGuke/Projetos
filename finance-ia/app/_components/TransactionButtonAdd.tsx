@@ -1,3 +1,5 @@
+"use client";
+
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -15,6 +17,7 @@ import {
 import { TransactionCategory, TransactionPaymentMethod, TransactionType } from "@prisma/client";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
+import { MoneyInput } from "./InputMoney";
 
 const formSchema = z.object({
     name: z.string().trim().min(1, { message: "Nome é obrigatório" }),
@@ -41,6 +44,14 @@ export function TransactionButtonAdd() {
         },
     })
 
+
+    function onSubmit(values: z.infer<typeof formSchema>) {
+        // Do something with the form values.
+        // ✅ This will be type-safe and validated.
+        
+    }
+
+
     return (
         <Dialog>
             <DialogTrigger>
@@ -64,7 +75,7 @@ export function TransactionButtonAdd() {
                             name="name"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Username</FormLabel>
+                                    <FormLabel>Nome</FormLabel>
                                     <FormControl>
                                         <Input  placeholder="Nome da transção" {...field} />
                                     </FormControl>
@@ -73,7 +84,21 @@ export function TransactionButtonAdd() {
                                 </FormItem>
                             )}
                         />
-                        <Button type="submit">Submit</Button>
+                        <FormField
+                            control={form.control}
+                            name="amount"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Valor</FormLabel>
+                                    <FormControl>
+                                        <MoneyInput placeholder="Digite o valor" {...field} />
+                                    </FormControl>
+
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        
 
                         <DialogFooter>
                             <Button >Adicionar</Button>
