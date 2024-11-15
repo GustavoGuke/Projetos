@@ -3,10 +3,11 @@
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { ArrowDownUpIcon, CalendarIcon } from "lucide-react";
+import { ArrowDownUpIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import {
     Dialog,
+    DialogClose,
     DialogContent,
     DialogDescription,
     DialogFooter,
@@ -26,8 +27,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "./ui/input";
 import { MoneyInput } from "./InputMoney";
 import { TRANSACTION_CATEGORY_OPTIONS, TRANSACTION_PAYMENT_METHOD_OPTIONS, TRANSACTION_TYPE_OPTIONS } from "../_constants/transactionsTypeOptions";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { Calendar } from "./ui/calendar";
 import { DatePickerDemo } from "./ui/date-picker";
 
 
@@ -40,11 +39,11 @@ const formSchema = z.object({
     date: z.date({ required_error: "Data é obrigatória" })
 })
 
-
+type FormSchema = z.infer<typeof formSchema>
 
 export function TransactionButtonAdd() {
 
-    const form = useForm<z.infer<typeof formSchema>>({
+    const form = useForm<FormSchema>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
@@ -57,16 +56,20 @@ export function TransactionButtonAdd() {
     })
 
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    function onSubmit(values: FormSchema) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-
+        console.log(values)
     }
 
 
     return (
-        <Dialog>
-            <DialogTrigger>
+        <Dialog onOpenChange={(open) => {
+            if (!open) {
+                form.reset()
+            }
+        }}>
+            <DialogTrigger asChild>
                 <Button className="rounded-full">
                     Adicionar Transação
                     <ArrowDownUpIcon className="ml-2" />
@@ -119,7 +122,7 @@ export function TransactionButtonAdd() {
                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                                         <FormControl>
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Select a verified email to display" />
+                                                <SelectValue  placeholder="Select a verified email to display" />
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
@@ -200,7 +203,7 @@ export function TransactionButtonAdd() {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Data</FormLabel>
-                                   <DatePickerDemo  value={field.value} onchange={field.onChange}/>
+                                    <DatePickerDemo value={field.value} onchange={field.onChange} />
 
                                     <FormMessage />
                                 </FormItem>
@@ -208,8 +211,11 @@ export function TransactionButtonAdd() {
                         />
 
                         <DialogFooter>
-                            <Button >Adicionar</Button>
-                            <Button variant="outline">Cancelar</Button>
+
+                            <Button type="submit">Adicionar</Button>
+                            <DialogClose asChild>
+                                <Button type="button" variant="outline">Cancelar</Button>
+                            </DialogClose>
                         </DialogFooter>
 
                     </form>

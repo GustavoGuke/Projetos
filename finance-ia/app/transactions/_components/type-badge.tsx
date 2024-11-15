@@ -7,7 +7,6 @@ interface TransactionTypeBadgeProps {
 }
 
 export default function TransactionTypeBadge({ transaction }: TransactionTypeBadgeProps) {
-    console.log(transaction.type)
     if (transaction.type === TransactionType.DEPOSIT) {
         return (
             <Badge className="bg-muted font-bold text-primary hover:bg-muted bg-green-700 bg-opacity-10">
