@@ -3,11 +3,7 @@ import {Mulish} from "next/font/google";
 import "./globals.css";
 
 import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton
+  ClerkProvider
 } from '@clerk/nextjs'
 
 const mulish = Mulish({

@@ -28,11 +28,13 @@ import { Input } from "./ui/input";
 import { MoneyInput } from "./InputMoney";
 import { TRANSACTION_CATEGORY_OPTIONS, TRANSACTION_PAYMENT_METHOD_OPTIONS, TRANSACTION_TYPE_OPTIONS } from "../_constants/transactionsTypeOptions";
 import { DatePickerDemo } from "./ui/date-picker";
+import { addTransaction } from "../_actions/add-transaction";
+import { useState } from "react";
 
 
 const formSchema = z.object({
     name: z.string().trim().min(1, { message: "Nome é obrigatório" }),
-    amount: z.string().trim().min(1, { message: "Valor é obrigatório" }),
+    amount: z.number().positive().min(1, { message: "Valor é obrigatório" }),
     type: z.nativeEnum(TransactionType, { required_error: "O tipo é obrigatório" }),
     category: z.nativeEnum(TransactionCategory, { required_error: "Categoria é obrigatória" }),
     paymentMethod: z.nativeEnum(TransactionPaymentMethod, { required_error: "O Método é obrigatório" }),
@@ -42,12 +44,12 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>
 
 export function TransactionButtonAdd() {
-
+    const [dialogIsOpen, setDialogIsOpen] = useState(false);
     const form = useForm<FormSchema>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
-            amount: "0",
+            amount: 0,
             category: TransactionCategory.OTHER,
             date: new Date(),
             paymentMethod: TransactionPaymentMethod.CASH,
@@ -56,19 +58,26 @@ export function TransactionButtonAdd() {
     })
 
 
-    function onSubmit(values: FormSchema) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+    async function onSubmit(values: FormSchema) {
+        try {
+            await addTransaction(values)
+            setDialogIsOpen(false)
+            form.reset()
+        } catch (error) {
+            console.log(error)
+        }
     }
 
 
     return (
-        <Dialog onOpenChange={(open) => {
-            if (!open) {
-                form.reset()
-            }
-        }}>
+        <Dialog
+            open={dialogIsOpen}
+            onOpenChange={(open) => {
+                setDialogIsOpen(open)
+                if (!open) {
+                    form.reset()
+                }
+            }}>
             <DialogTrigger asChild>
                 <Button className="rounded-full">
                     Adicionar Transação
@@ -106,7 +115,13 @@ export function TransactionButtonAdd() {
                                 <FormItem>
                                     <FormLabel>Valor</FormLabel>
                                     <FormControl>
-                                        <MoneyInput placeholder="Digite o valor" {...field} />
+                                        <MoneyInput
+                                            placeholder="Digite o valor"
+                                            value={field.value}
+                                            onValueChange={({ floatValue }) => field.onChange(floatValue)}
+                                            onBlur={field.onBlur}
+                                            disabled={field.disabled}
+                                        />
                                     </FormControl>
 
                                     <FormMessage />
@@ -122,7 +137,7 @@ export function TransactionButtonAdd() {
                                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                                         <FormControl>
                                             <SelectTrigger>
-                                                <SelectValue  placeholder="Select a verified email to display" />
+                                                <SelectValue placeholder="Select a verified email to display" />
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
