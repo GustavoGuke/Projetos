@@ -5,6 +5,7 @@ import { PencilIcon, TrashIcon } from "lucide-react"
 import TransactionTypeBadge from "../_components/type-badge"
 import { Button } from "@/app/_components/ui/button"
 import { TRANSACTION_CATEGORY_LABELS, TRANSACTION_PAYMENT_METHOD_LABELS } from "@/app/_constants/transactionsTypeOptions"
+import EditTransactionButton from "../_components/edit-transaction-button"
 
 
 // This type is used to define the shape of our data.
@@ -50,12 +51,10 @@ export const transactionsColumns: ColumnDef<Transaction>[] = [
     {
         accessorKey: "actions",
         header: "Ações",
-        cell: () => {
+        cell: ({ row: { original: transaction } }) => {
             return (
                 <div className="flex gap-2">
-                    <Button variant="ghost" size="icon" className="text-muted-foreground">
-                        <PencilIcon />
-                    </Button>
+                    <EditTransactionButton transaction={transaction}/>
                     <Button variant="ghost" size="icon" className="text-muted-foreground">
                         <TrashIcon />
                     </Button>

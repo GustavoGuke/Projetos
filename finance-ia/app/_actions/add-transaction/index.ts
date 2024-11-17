@@ -19,10 +19,16 @@ interface UpsertTransactionParams {
 
 export async function addTransaction(params: UpsertTransactionParams) {
     addTransactionSchema.parse(params)
-    const { userId} = await auth()
+    const { userId } = await auth()
     if (!userId) {
         throw new Error("Unauthorized")
     }
-    db.transaction.create({ data: {...params, userId} })
+    await db.transaction.upsert({
+        where: {
+            id: params.id,
+        },
+        update: { ...params, userId },
+        create: { ...params, userId },
+    })
     revalidatePath("/transactions")
 }
