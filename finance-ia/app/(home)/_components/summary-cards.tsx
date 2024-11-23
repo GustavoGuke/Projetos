@@ -6,39 +6,19 @@ import { db } from '@/app/_lib/prisma'
 
 
 interface SummaryCardsProps {
-    month: string
+    month: string;
+    balance: number;
+    depositsTotal: number;
+    investmentsTotal: number;
+    expensesTotal: number;
+
 }
 
-export default async function SummaryCards({ month }: SummaryCardsProps) {
-    const where = {
-        date: {
-            gte: new Date(`${month}-01`),
-            lte: new Date(`${month}-30`),
-        },
-    }
+export default async function SummaryCards({ balance,
+    depositsTotal,
+    expensesTotal,
+    investmentsTotal, }: SummaryCardsProps) {
 
-
-    const depositsTotal = Number(
-        (await db.transaction.aggregate({
-            where: { ...where, type: 'DEPOSIT' },
-            _sum: { amount: true }
-        })
-        )?._sum?.amount
-    )
-
-    const investimentsTotal = Number(
-        (await db.transaction.aggregate({
-            where: { ...where, type: 'INVESTMENT' },
-            _sum: { amount: true }
-        }))?._sum.amount
-    )
-    const expensesTotal = Number(
-        (await db.transaction.aggregate({
-            where: { ...where, type: 'EXPENSE' },
-            _sum: { amount: true }
-        }))?._sum.amount
-    )
-    const balance = depositsTotal - investimentsTotal - expensesTotal;
     return (
         <div className='space-y-6'>
             <ResumeCard
@@ -52,7 +32,7 @@ export default async function SummaryCards({ month }: SummaryCardsProps) {
                 <ResumeCard
                     icon={<PiggyBankIcon size={16} />}
                     title="Investido"
-                    amount={investimentsTotal}
+                    amount={investmentsTotal}
                 />
                 <ResumeCard
                     icon={<TrendingUpIcon size={16} className='text-primary' />}
