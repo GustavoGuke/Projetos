@@ -4,15 +4,22 @@ import { TotalExpensePerCategory, TransactionPercentagePerType } from "./types";
 import { auth } from "@clerk/nextjs/server";
 
 export const getDashboard = async (month: string) => {
+    
     const { userId } = await auth();
     if (!userId) {
         throw new Error("Unauthorized");
     }
+    if(!month) month =  (new Date().getMonth() + 1).toString();
+    
     const where = {
         userId,
         date: {
-            gte: new Date(`2024-${month}-01`),
-            lt: new Date(`2024-${month}-31`),
+            gte: new Date(`2024-${month}-01T00:00:00.000Z`),
+            lt: new Date(`2024-${month}-31T23:59:59.999Z`),
+            // gte:new Date(`2024-${month}-01`),
+            // lt: new Date(`2024-${month}-31`),
+            // gte:new Date(`2024-${parseInt(month) < 10 ? `0${month}` : month}-01`),
+            // lt: new Date(`2024-${parseInt(month) < 10 ? `0${month}` : month}-31`),
         },
     };
     const depositsTotal = Number(
