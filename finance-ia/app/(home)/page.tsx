@@ -9,6 +9,7 @@ import { isMatch } from "date-fns";
 import { TransactionPieCharts } from "./_components/transaction-pie-charts";
 import { getDashboard } from "../_data/get-dashboard";
 import ExpensesPerCategory from "./_components/expenses-per-category";
+import LastTransactions from "./_components/last-transactions";
 
 
 interface HomeProps {
@@ -47,6 +48,7 @@ export default async function Home({ searchParams: { month } }: HomeProps) {
               <ExpensesPerCategory expensesPerCategory={dashboard.totalExpensePerCategory} /> 
             </div>
           </div>
+          <LastTransactions lastTransactions={dashboard.lastTransactions}/>
         </div>
       </div>
     </>
