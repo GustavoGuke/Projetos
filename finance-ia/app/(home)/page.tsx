@@ -34,16 +34,16 @@ export default async function Home({ searchParams: { month } }: HomeProps) {
   return (
     <>
       <Navbar />
-      <div className="space-y-6 p-6 ">
+      <div className="flex h-full flex-col space-y-6 overflow-hidden p-6">
         <div className="flex p-6 justify-between items-center ">
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <TimeSelect />
         </div>
 
-        <div className="grid grid-cols-[2fr,1fr]">
-          <div className="space-y-6">
+        <div className="grid grid-cols-[2fr,1fr] h-full overflow-hidden">
+          <div className="flex flex-col gap-6 overflow-hidden">
             <SummaryCards month={month} {...dashboard} />
-            <div className="grid grid-cols-3 grid-rows-1 gap-6">
+            <div className="grid h-full grid-cols-3 grid-rows-1 gap-6 overflow-hidden">
               <TransactionPieCharts {...dashboard} />
               <ExpensesPerCategory expensesPerCategory={dashboard.totalExpensePerCategory} /> 
             </div>

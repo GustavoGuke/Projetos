@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import {Mulish} from "next/font/google";
+import { Mulish } from "next/font/google";
 import "./globals.css";
 
 import {
@@ -23,14 +23,16 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-    <html lang="en">
-      <body
-        className={` ${mulish.variable} antialiased dark`}
-      >
-        
-        {children}
-      </body>
-    </html>
+      <html lang="en">
+        <body
+          className={` ${mulish.variable} antialiased dark`}
+        >
+          <div className="flex flex-col h-full overflow-hidden">
+
+            {children}
+          </div>
+        </body>
+      </html>
     </ClerkProvider>
   );
 }
